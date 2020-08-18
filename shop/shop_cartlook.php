@@ -43,13 +43,7 @@
         }
         $dbh=null;
 
-        //カートの中身を表示する
-        for($i=0;$i<$max;$i++){
-            echo $pro_name[$i];
-            echo $pro_gazou[$i];
-            echo $pro_price[$i].'円 ';
-            echo $kazu[$i].'<br>';
-        }
+        
     } catch (Exsetion $e) {
         echo 'ただいま障害により大変ご迷惑をおかけしております。';
         exit();
@@ -66,7 +60,19 @@
     <title>ろくまる農園</title>
 </head>
 <body>
-    <form action="pro_delete_done.php" method="post">
+    <form action="kazu_change.php" method="post">
+        <!-- //カートの中身を表示する -->
+        <?php
+        for($i=0;$i<$max;$i++){
+            echo $pro_name[$i];
+            echo $pro_gazou[$i];
+            echo $pro_price[$i].'円 ';
+            echo '<input type="text" name="kazu<?php echo $i ?> value="<?php echo $kazu[$i] ?><br>';
+        }
+        ?>
+        <br>
+        <input type="hidden" name="max" value="<?php echo $max;?>">
+        <input type="submit" value="数量変更"><br>
         <input type="button" onclick="history.back()" value="戻る">
     </form>
 </body>
