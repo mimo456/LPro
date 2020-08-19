@@ -11,7 +11,7 @@
 
     try {
         $cart=$_SESSION['cart'];
-        $kazu=$_SESSION['kazu'];
+        $kazu=$_SESSION['kazu'];//kazu_change.phpで代入されていれば$kazuに選んだ商品数が代入される。
         $max=count($cart);//cart配列の配列数を数える
 
         // echo '<pre>';
@@ -62,14 +62,16 @@
 <body>
     <form action="kazu_change.php" method="post">
         <!-- //カートの中身を表示する -->
+        <p>カートの中身</p>
         <?php
         for($i=0;$i<$max;$i++){
             echo $pro_name[$i];
             echo $pro_gazou[$i];
             echo $pro_price[$i].'円 ';
-            echo '<input type="text" name="kazu<?php echo $i ?> value="<?php echo $kazu[$i] ?><br>';
-        }
         ?>
+            <input type="text" name="kazu<?php echo $i ?>" value="<?php echo $kazu[$i];?>">
+            <?php echo $pro_price[$i]*$kazu[$i]; ?>円<br>
+        <?php } ?>
         <br>
         <input type="hidden" name="max" value="<?php echo $max;?>">
         <input type="submit" value="数量変更"><br>
