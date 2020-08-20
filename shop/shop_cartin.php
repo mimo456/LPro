@@ -15,6 +15,11 @@
         if(isset($_SESSION['cart'])){
             $cart=$_SESSION['cart'];
             $kazu=$_SESSION['kazu'];
+            if(in_array($pro_code,$cart)==true){//ダブっているものを探すので、カートの中身が存在する場合にin_arrayでダブっているものを探す。
+                echo 'その商品はすでにカートに入っています。<br>';
+                echo '<a href="shop_list.php">商品一覧に戻る</a>';
+                exit();
+            }
         }
         $cart[]=$pro_code;//$_SESSION['cart']の中身がある場合はそこに追加する追加する
         $kazu[]=1;

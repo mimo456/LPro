@@ -10,9 +10,19 @@
     }
 
     try {
-        $cart=$_SESSION['cart'];
-        $kazu=$_SESSION['kazu'];//kazu_change.phpで代入されていれば$kazuに選んだ商品数が代入される。
-        $max=count($cart);//cart配列の配列数を数える
+        if(isset($_SESSION['cart'])==true){
+            $cart=$_SESSION['cart'];
+            $kazu=$_SESSION['kazu'];//kazu_change.phpで代入されていれば$kazuに選んだ商品数が代入される。
+            $max=count($cart);//cart配列の配列数を数える
+        }else{
+            $max=0;
+        }
+    
+        if($max==0){//カートに商品が入っていない場合
+            echo 'カートに商品が入っていません。<br><br>';
+            echo '<a href="shop_list.php">商品一覧に戻る</a>';
+            exit();
+        }
 
         // echo '<pre>';
         // var_dump($cart);
@@ -60,20 +70,31 @@
     <title>ろくまる農園</title>
 </head>
 <body>
+    <p>カートの中身</p>
     <form action="kazu_change.php" method="post">
         <!-- //カートの中身を表示する -->
-        <p>カートの中身</p>
-        <?php
-        for($i=0;$i<$max;$i++){
-            echo $pro_name[$i];
-            echo $pro_gazou[$i];
-            echo $pro_price[$i].'円 ';
-        ?>
-            <input type="text" name="kazu<?php echo $i ?>" value="<?php echo $kazu[$i];?>">
-            <?php echo $pro_price[$i]*$kazu[$i]; ?>円<br>
-        <?php } ?>
+        <table border="1">
+            <tr>
+                <td>商品</td>
+                <td>商品画像</td>
+                <td>価格</td>
+                <td>数量</td>
+                <td>小計</td>
+                <td>削除</td>
+            </tr>
+            <?php for($i=0;$i<$max;$i++){ ?>
+                <tr>
+                    <td><?= $pro_name[$i]; ?></td>
+                    <td><?= $pro_gazou[$i]; ?></td>
+                    <td><?= $pro_price[$i].'円 '; ?></td>
+                    <td><input type="text" name="kazu<?= $i ?>" value="<?= $kazu[$i];?>"></td>
+                    <td><?= $pro_price[$i]*$kazu[$i]; ?>円</td>
+                    <td><input type="checkbox" name="sakujo<?= $i; ?>"><br></td>
+                </tr>
+            <?php } ?>
+        </table>
         <br>
-        <input type="hidden" name="max" value="<?php echo $max;?>">
+        <input type="hidden" name="max" value="<?= $max;?>">
         <input type="submit" value="数量変更"><br>
         <input type="button" onclick="history.back()" value="戻る">
     </form>
