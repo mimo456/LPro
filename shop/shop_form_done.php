@@ -34,16 +34,15 @@
             $tel=$post['tel'];
             //確認した文章をdoneで表示する
             $msg=<<<EOF
-                {$onamae}様<br>
-                ご注文ありがとうございました。<br>
-                {$email}にメールを送りましたのでご確認ください。<br>
-                商品は以下の住所に発送させていただきます。<br>
-                {$postal1}-{$postal2}<br>
-                {$address}<br>
-                {$tel}<br>
+                {$onamae}様\n\n
+                このたびはご注文ありがとうございました。\n\n
+                ご注文商品\n
+                -------------------\n
             EOF;
 
-            echo $msg;
+            $cart=$_SESSION['cart'];
+            $kazu=$_SESSION['kazu'];
+            $max=count($cart);
 
             //データベースに接続
             $dsn= "mysql:dbname=shop;host=localhost;charset=utf8";
@@ -52,16 +51,25 @@
             $dbh=new PDO($dsn, $user, $password);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//例外 を投げる
 
-            $sql='DELETE FROM mst_product WHERE code=?';
-            $stmt=$dbh->prepare($sql);
-            $stmt->execute(array($pro_code));//SQL文で指示を出す
+            for($i;$i<$max;$i++){
+                $sql='SELECT FROM mst_product WHERE code=?';
+                $stmt=$dbh->prepare($sql);
+                $data[0]=$cart[$i];
+                $stmt->execute(array($data));//SQL文で指示を出す
+
+                $rec=$stmt->fetch(PDO::FETCH_ASSOC);
+
+                $name=$rec['name'];
+                $price=$rec['price'];
+                $suryo=$kazu[$i];
+                $shoukei=$price*$suryo;
+            }
+
+            
 
             $dbh=null;
 
-            if ($pro_gazou_name!='') {//画像のリンクがあった場合削除(unlink)する。
-                unlink('./gazou/'.$pro_gazou_name);
-            }
-            echo '削除しました。';
+            
 
         } catch (Expection $e) {
             print 'ただいま障害により大変ご迷惑をお掛けしております。';
