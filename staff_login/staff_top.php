@@ -10,6 +10,7 @@
         echo 'ショップ管理トップメニュー<br><br>';
         echo '<a href="../staff/staff_list.php">スタッフ管理</a><br><br>';
         echo '<a href="../product/pro_list.php">商品管理</a><br><br>';
+        echo '<a href="../order/order_download.php">注文ダウンロード</a><br><br>';
         echo '<a href="staff_logout.php">ログアウト</a>';
 
     }
